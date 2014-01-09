@@ -54,6 +54,12 @@ if file.Exists("favorite_servers.txt", "DATA") then
 	servers = util.KeyValuesToTable(file.Read("favorite_servers.txt"))
 end
 
+for _,server in pairs(servers) do
+	server[1] = server[1] or ""
+	server[2] = server[2] or "27015"
+	server[3] = server[3] or ""
+end
+
 ----------------------------------------------------------------------------------------------------
 
 -- Can't get host ip, so we'll store the ip ourselves.
@@ -70,8 +76,8 @@ local function save()
 	file.Write("favorite_servers.txt", util.TableToKeyValues(servers))
 end
 
-local function add_server(ip, port, password)
-	table.insert(servers, {ip, port, password})
+local function add_server(ip, port, password, custom_name)
+	table.insert(servers, {ip, port, password, custom_name})
 	save()
 end
 
@@ -80,10 +86,11 @@ local function remove_server(id)
 	save()
 end
 
-local function set_server(id, ip, port, password)
+local function set_server(id, ip, port, password, custom_name)
 	servers[id][1] = ip
 	servers[id][2] = port
 	servers[id][3] = password
+	servers[id][4] = custom_name
 	save()
 end
 
@@ -195,6 +202,28 @@ function PANEL:Init()
 	pnl_password._Paint = pnl_password.Paint
 	hook_event(self, "Password", "Paint")
 	
+	local pnl_custom_name_holder = vgui.Create("Panel", self)
+	pnl_custom_name_holder:Dock(TOP)
+	pnl_custom_name_holder:SetTall(24)
+	pnl_custom_name_holder:DockMargin(0, 0, 0, 4)
+	
+	local pnl_label_custom_name = vgui.Create("DLabel", pnl_custom_name_holder)
+	self.pnl_label_custom_name = pnl_label_custom_name
+	pnl_label_custom_name:Dock(LEFT)
+	pnl_label_custom_name:SetFont("quickconnect_font")
+	pnl_label_custom_name:SetTextColor(Color(255, 255, 255, 180))
+	pnl_label_custom_name:SetText("Custom Name: ")
+	
+	local pnl_custom_name = vgui.Create("DTextEntry", pnl_custom_name_holder)
+	self.pnl_custom_name = pnl_custom_name
+	pnl_custom_name:Dock(FILL)
+	pnl_custom_name:SetCursorColor(Color(255, 255, 255, 180))
+	pnl_custom_name:SetTextColor(Color(255, 255, 255, 180))
+	pnl_custom_name:SetFont("quickconnect_font2")
+	pnl_custom_name:SetDrawBackground(false)
+	pnl_custom_name._Paint = pnl_custom_name.Paint
+	hook_event(self, "Custom_Name", "Paint")
+	
 	local pnl_footer = vgui.Create("Panel", self)
 	pnl_footer:Dock(TOP)
 	pnl_footer:SetTall(16)
@@ -229,14 +258,19 @@ function PANEL:Finish_DoClick()
 	local ip = self.pnl_address:GetValue():Trim()
 	local port = self.pnl_port:GetValue():Trim()
 	local password = self.pnl_password:GetValue()
+	local custom_name = self.pnl_custom_name:GetValue()
 	
 	if ip == "" then return end
 	if port == "" then return end
 	
+	if custom_name == "" then
+		custom_name = nil
+	end
+	
 	if not self:GetID() then
-		add_server(ip, port, password)
+		add_server(ip, port, password, custom_name)
 	else
-		set_server(self:GetID(), ip, port, password)
+		set_server(self:GetID(), ip, port, password, custom_name)
 	end
 	
 	pnl_quickconnect:Rebuild()
@@ -273,23 +307,31 @@ end
 function PANEL:Password_Paint(w, h)
 	paint_text_entry(self.pnl_password, w, h)
 end
+function PANEL:Custom_Name_Paint(w, h)
+	paint_text_entry(self.pnl_custom_name, w, h)
+end
 
 function PANEL:SetIP(ip)
-	self.pnl_address:SetText(ip)
+	self.pnl_address:SetText(ip or "")
 end
 
 function PANEL:SetPort(port)
-	self.pnl_port:SetText(port)
+	self.pnl_port:SetText(port or "")
 end
 
 function PANEL:SetPassword(password)
-	self.pnl_password:SetText(password)
+	self.pnl_password:SetText(password or "")
+end
+
+function PANEL:SetCustomName(custom_name)
+	self.pnl_custom_name:SetText(custom_name or "")
 end
 
 function PANEL:PerformLayout()
 	self.pnl_label_address:SetWide(self:GetWide()/4)
 	self.pnl_label_port:SetWide(self:GetWide()/4)
 	self.pnl_label_password:SetWide(self:GetWide()/4)
+	self.pnl_label_custom_name:SetWide(self:GetWide()/4)
 	
 	self:SizeToChildren(false, true)
 end
@@ -334,10 +376,12 @@ end
 
 local PANEL = {}
 
+AccessorFunc(PANEL, "color", "Color")
+
 function PANEL:DoClick() end
 
 function PANEL:Init()
-	
+	self:SetColor(Color(255, 255, 255, 255))
 end
 
 function PANEL:SetMaterial(mat)
@@ -357,14 +401,19 @@ function PANEL:Paint(w, h)
 	self.glow_alpha = self.glow_alpha or 0
 	self.glow_alpha = math.Approach(self.glow_alpha, desired_alpha, FrameTime()*1500)
 	
+	local r = self.color.r
+	local g = self.color.g
+	local b = self.color.b
+	local a = self.color.a
+	
 	if self.glow_alpha > 0 then
 		surface.SetMaterial(mat_glow)
-		surface.SetDrawColor(255, 255, 255, self.glow_alpha)
+		surface.SetDrawColor(r, g, b, self.glow_alpha)
 		surface.DrawTexturedRect(0, 0, w, h)
 	end
 	
 	surface.SetMaterial(self.material)
-	surface.SetDrawColor(255, 255, 255, 255)
+	surface.SetDrawColor(r, g, b, a)
 	surface.DrawTexturedRect(0, 0, w, h)
 end
 
@@ -560,6 +609,7 @@ AccessorFunc(PANEL, "id", "ID")
 AccessorFunc(PANEL, "ip", "IP")
 AccessorFunc(PANEL, "port", "Port")
 AccessorFunc(PANEL, "password", "Password")
+AccessorFunc(PANEL, "custom_name", "CustomName")
 
 function PANEL:Init()
 	self:SetPort("27015")
@@ -595,6 +645,7 @@ function PANEL:Edit_DoClick()
 	pnl:SetIP(self:GetIP())
 	pnl:SetPort(self:GetPort())
 	pnl:SetPassword(self:GetPassword())
+	pnl:SetCustomName(self:GetCustomName())
 end
 
 function PANEL:Connect_DoClick()
@@ -627,25 +678,43 @@ function PANEL:GetInfo()
 	if CurTime() < nextupdate then return end
 	nextupdate = CurTime()+0.2
 	
+	self.name = self.custom_name or tostring(self.ip)
+	self.name_adjusted = nil
+	self.alive = true
+	self.players = -1
+	self.players_max = -1
+	
 	local url = Format("http://www.gametracker.com/server_info/%s:%s", self.ip, self.port)
 	http.Fetch(url, function(body, length, headers, code)
+			
+			if not IsValid(self) then return end
+			
 			local name = body:match(match_name)
 			local status = body:match(match_status)
 			local players, players_max = body:match(match_players)
-			self.name = parse_html_text(name) or tostring(self.ip).." | Game tracker profile not found."
-			self.alive = status == "Alive"
-			self.players = tonumber(players or "") or -1
-			self.players_max = tonumber(players_max or "") or -1
 			
-			if not self.alive then
-				self.pnl_connect:SetVisible(false)
+			if name then
+				self.name = self.custom_name or parse_html_text(name)
+				self.name_adjusted = nil
+				self.alive = status == "Alive"
+				self.players = tonumber(players or "") or -1
+				self.players_max = tonumber(players_max or "") or -1
+				
+				if self.alive then
+					self.pnl_connect:SetColor(Color(255, 255, 255, 255))
+				else
+					self.pnl_connect:SetColor(Color(255, 160, 160, 255))
+				end
 			end
 		end,
 		function(error)
-			self.name = error
-			self.alive = false
-			self.players = -1
-			self.players_max = -1
+			
+		end)
+	
+	serverlist.PlayerList(Format("%s:%s", self.ip, self.port), function(tbl)
+		if tbl and self.players == -1 then
+			self.players = table.Count(tbl)
+		end
 		end)
 end
 
@@ -684,7 +753,7 @@ function PANEL:Paint(w, h)
 		surface.SetTextColor(255, 255, 255, 180)
 		surface.DrawText(text)
 		
-		text = tostring(self.players)
+		text = tostring(self.players >= 0 and self.players or "?")
 		local tw, th = surface.GetTextSize(text)
 		surface.SetTextPos(self:GetWide()*0.75+20-tw, h/2-th/2)
 		surface.DrawText(text)
@@ -694,7 +763,7 @@ function PANEL:Paint(w, h)
 		surface.SetTextPos(self:GetWide()*0.75+20, h/2-th/2)
 		surface.DrawText(text)
 		
-		text = tostring(self.players_max)
+		text = tostring(self.players_max >= 0 and self.players_max or "?")
 		surface.SetTextPos(self:GetWide()*0.75+20+tw, h/2-th/2)
 		surface.DrawText(text)
 	end
@@ -780,6 +849,7 @@ function PANEL:Rebuild()
 		pnl:SetIP(tbl[1])
 		pnl:SetPort(tbl[2])
 		pnl:SetPassword(tbl[3])
+		pnl:SetCustomName(tbl[4])
 		self.pnl_list:AddItem(pnl)
 	end
 end
