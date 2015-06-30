@@ -891,7 +891,7 @@ vgui.Register("quick_connect", PANEL)
 timer.Simple(1, function()
 	local pnl = vgui.Create("quick_connect")
 	pnl:SetSize(600, 200)
-	pnl:AlignBottom(100)
+	pnl:AlignBottom(50)
 	pnl:AlignRight(50)
 	
 	pnl:MakePopup()
