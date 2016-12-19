@@ -99,9 +99,9 @@ end
 local function hook_event(pnl, child_index, func_index)
 	local callback_index = child_index.."_"..func_index
 	child_index = "pnl_"..child_index:lower()
-	
+
 	local child = pnl[child_index]
-	
+
 	child[func_index] = function(_, ...)
 		return pnl[callback_index](pnl, ...)
 	end
@@ -114,40 +114,40 @@ local PANEL = {}
 AccessorFunc(PANEL, "id", "ID")
 
 function PANEL:Init()
-	
+
 	self:DockPadding(8, 8, 8, 8)
-	
+
 	local pnl_header = vgui.Create("Panel", self)
 	pnl_header:Dock(TOP)
 	pnl_header:SetTall(16)
 	pnl_header:DockMargin(0, 0, 0, 4)
-	
+
 	local pnl_close = vgui.Create("nice_button", pnl_header)
 	self.pnl_close = pnl_close
 	pnl_close:Dock(RIGHT)
 	pnl_close:SetWide(16)
 	pnl_close:SetMaterial(mat_icon_remove)
 	hook_event(self, "Close", "DoClick")
-	
+
 	local pnl_label_title = vgui.Create("DLabel", pnl_header)
 	self.pnl_label_title = pnl_label_title
 	pnl_label_title:Dock(FILL)
 	pnl_label_title:SetFont("quickconnect_font")
 	pnl_label_title:SetTextColor(Color(255, 255, 255, 180))
 	pnl_label_title:SetText("Edit Server")
-	
+
 	local pnl_address_holder = vgui.Create("Panel", self)
 	pnl_address_holder:Dock(TOP)
 	pnl_address_holder:SetTall(24)
 	pnl_address_holder:DockMargin(0, 0, 0, 4)
-	
+
 	local pnl_label_address = vgui.Create("DLabel", pnl_address_holder)
 	self.pnl_label_address = pnl_label_address
 	pnl_label_address:Dock(LEFT)
 	pnl_label_address:SetFont("quickconnect_font")
 	pnl_label_address:SetTextColor(Color(255, 255, 255, 180))
 	pnl_label_address:SetText("IP Address: ")
-	
+
 	local pnl_address = vgui.Create("DTextEntry", pnl_address_holder)
 	self.pnl_address = pnl_address
 	pnl_address:Dock(FILL)
@@ -157,19 +157,19 @@ function PANEL:Init()
 	pnl_address:SetDrawBackground(false)
 	pnl_address._Paint = pnl_address.Paint
 	hook_event(self, "Address", "Paint")
-	
+
 	local pnl_port_holder = vgui.Create("Panel", self)
 	pnl_port_holder:Dock(TOP)
 	pnl_port_holder:SetTall(24)
 	pnl_port_holder:DockMargin(0, 0, 0, 4)
-	
+
 	local pnl_label_port = vgui.Create("DLabel", pnl_port_holder)
 	self.pnl_label_port = pnl_label_port
 	pnl_label_port:Dock(LEFT)
 	pnl_label_port:SetFont("quickconnect_font")
 	pnl_label_port:SetTextColor(Color(255, 255, 255, 180))
 	pnl_label_port:SetText("Port: ")
-	
+
 	local pnl_port = vgui.Create("DTextEntry", pnl_port_holder)
 	self.pnl_port = pnl_port
 	pnl_port:Dock(FILL)
@@ -179,19 +179,19 @@ function PANEL:Init()
 	pnl_port:SetDrawBackground(false)
 	pnl_port._Paint = pnl_port.Paint
 	hook_event(self, "Port", "Paint")
-	
+
 	local pnl_password_holder = vgui.Create("Panel", self)
 	pnl_password_holder:Dock(TOP)
 	pnl_password_holder:SetTall(24)
 	pnl_password_holder:DockMargin(0, 0, 0, 4)
-	
+
 	local pnl_label_password = vgui.Create("DLabel", pnl_password_holder)
 	self.pnl_label_password = pnl_label_password
 	pnl_label_password:Dock(LEFT)
 	pnl_label_password:SetFont("quickconnect_font")
 	pnl_label_password:SetTextColor(Color(255, 255, 255, 180))
 	pnl_label_password:SetText("Password: ")
-	
+
 	local pnl_password = vgui.Create("DTextEntry", pnl_password_holder)
 	self.pnl_password = pnl_password
 	pnl_password:Dock(FILL)
@@ -201,19 +201,19 @@ function PANEL:Init()
 	pnl_password:SetDrawBackground(false)
 	pnl_password._Paint = pnl_password.Paint
 	hook_event(self, "Password", "Paint")
-	
+
 	local pnl_custom_name_holder = vgui.Create("Panel", self)
 	pnl_custom_name_holder:Dock(TOP)
 	pnl_custom_name_holder:SetTall(24)
 	pnl_custom_name_holder:DockMargin(0, 0, 0, 4)
-	
+
 	local pnl_label_custom_name = vgui.Create("DLabel", pnl_custom_name_holder)
 	self.pnl_label_custom_name = pnl_label_custom_name
 	pnl_label_custom_name:Dock(LEFT)
 	pnl_label_custom_name:SetFont("quickconnect_font")
 	pnl_label_custom_name:SetTextColor(Color(255, 255, 255, 180))
 	pnl_label_custom_name:SetText("Custom Name: ")
-	
+
 	local pnl_custom_name = vgui.Create("DTextEntry", pnl_custom_name_holder)
 	self.pnl_custom_name = pnl_custom_name
 	pnl_custom_name:Dock(FILL)
@@ -223,26 +223,26 @@ function PANEL:Init()
 	pnl_custom_name:SetDrawBackground(false)
 	pnl_custom_name._Paint = pnl_custom_name.Paint
 	hook_event(self, "Custom_Name", "Paint")
-	
+
 	local pnl_footer = vgui.Create("Panel", self)
 	pnl_footer:Dock(TOP)
 	pnl_footer:SetTall(16)
-	
+
 	local pnl_finish = vgui.Create("nice_button", pnl_footer)
 	self.pnl_finish = pnl_finish
 	pnl_finish:Dock(RIGHT)
 	pnl_finish:SetWide(16)
 	pnl_finish:SetMaterial(mat_icon_finish)
 	hook_event(self, "Finish", "DoClick")
-	
+
 	pnl_port:SetText("27015")
-	
+
 	if game.GetMap() != "menu" and current_address then
 		-- Default to server's IP...
 		-- That is, if there even was a way to get the server ip
 		-- this is your local ip, not the server your connected to..
 		--pnl_address:SetText(GetConVarString("ip"))
-		
+
 		-- So a "workaround"
 		addr, port = current_address:match("(.-):(.-)")
 		pnl_address:SetText(addr)
@@ -259,20 +259,20 @@ function PANEL:Finish_DoClick()
 	local port = self.pnl_port:GetValue():Trim()
 	local password = self.pnl_password:GetValue()
 	local custom_name = self.pnl_custom_name:GetValue()
-	
+
 	if ip == "" then return end
 	if port == "" then return end
-	
+
 	if custom_name == "" then
 		custom_name = nil
 	end
-	
+
 	if not self:GetID() then
 		add_server(ip, port, password, custom_name)
 	else
 		set_server(self:GetID(), ip, port, password, custom_name)
 	end
-	
+
 	pnl_quickconnect:Rebuild()
 	self:Remove()
 end
@@ -282,7 +282,7 @@ local function paint_rounded_outline(r, x, y, w, h)
 	surface.DrawLine(x+r  , y+h-1 , x+w-r, y+h-1  )
 	surface.DrawLine(x    , y+r   , x      , y+h-r)
 	surface.DrawLine(x+w-1, y+r   , x+w-1  , y+h-r)
-	
+
 	local a = r/2
 	surface.SetMaterial(mat_corner)
 	surface.DrawTexturedRectRotated(a, a, r, r, 0)
@@ -332,21 +332,21 @@ function PANEL:PerformLayout()
 	self.pnl_label_port:SetWide(self:GetWide()/4)
 	self.pnl_label_password:SetWide(self:GetWide()/4)
 	self.pnl_label_custom_name:SetWide(self:GetWide()/4)
-	
+
 	self:SizeToChildren(false, true)
 end
 
 function PANEL:Paint(w, h)
-	
+
 	local desired = 100
-	
+
 	if self.mouse_inside then
 		desired = 255
 	end
-	
+
 	self.alpha = math.Approach(self.alpha or desired, desired, FrameTime()*1200)
 	self:SetAlpha(self.alpha)
-	
+
 	draw.RoundedBox(8, 0, 0, w, h, Color(0, 0, 0, 210))
 end
 
@@ -364,11 +364,11 @@ local function open_editor(id)
 	local pnl_editor = vgui.Create("server_editor")
 	pnl_editor:SetSize(400, 10)
 	pnl_editor:Center()
-	
+
 	pnl_editor:MakePopup()
 	pnl_editor:MoveToFront()
 	pnl_editor:SetKeyBoardInputEnabled(true)
-	
+
 	return pnl_editor
 end
 
@@ -389,29 +389,29 @@ function PANEL:SetMaterial(mat)
 end
 
 function PANEL:Paint(w, h)
-	
+
 	if not self.material then return end
-	
+
 	local desired_alpha = 0
-	
+
 	if self.mouse_inside then
-		desired_alpha = 180
+		desired_alpha = 100
 	end
-	
+
 	self.glow_alpha = self.glow_alpha or 0
 	self.glow_alpha = math.Approach(self.glow_alpha, desired_alpha, FrameTime()*1500)
-	
+
 	local r = self.color.r
 	local g = self.color.g
 	local b = self.color.b
 	local a = self.color.a
-	
+
 	if self.glow_alpha > 0 then
 		surface.SetMaterial(mat_glow)
 		surface.SetDrawColor(r, g, b, self.glow_alpha)
 		surface.DrawTexturedRect(0, 0, w, h)
 	end
-	
+
 	surface.SetMaterial(self.material)
 	surface.SetDrawColor(r, g, b, a)
 	surface.DrawTexturedRect(0, 0, w, h)
@@ -437,11 +437,11 @@ AccessorFunc(PANEL, "spacing", "Spacing")
 function PANEL:OnCanvasHeightChange(height) end
 
 function PANEL:Init()
-	
+
 	self.panels = {}
-	
+
 	self:SetSpacing(4)
-	
+
 	local pnl_canvas = vgui.Create("Panel", self)
 	self.pnl_canvas = pnl_canvas
 end
@@ -477,7 +477,7 @@ end
 function PANEL:AddItem(pnl)
 	table.insert(self.panels, pnl)
 	pnl:SetParent(self.pnl_canvas)
-	
+
 	self:Rebuild()
 end
 
@@ -506,7 +506,7 @@ end
 function PANEL:Rebuild()
 	local pnl_canvas = self.pnl_canvas
 	self:Clean()
-	
+
 	local x = self.spacing
 	local y = self.spacing
 	for _,pnl in ipairs(self.panels) do
@@ -514,7 +514,7 @@ function PANEL:Rebuild()
 		pnl:SetPos(x, y)
 		y = y + pnl:GetTall() + self.spacing
 	end
-	
+
 	pnl_canvas:SetWide(self:GetWide())
 	pnl_canvas:SetTall(y)
 	self:OnCanvasHeightChange(y)
@@ -542,7 +542,7 @@ function PANEL:GetViewHeight() return self:GetTall() end
 
 function PANEL:Init()
 	self:SetValue(0)
-	
+
 end
 
 function PANEL:SetPercentage(percentage)
@@ -555,38 +555,38 @@ end
 function PANEL:SetBarY(bary)
 	local percent = bary / (self:GetTall()-self.barh)
 	local y = self:GetMaxValue()*percent
-	
+
 	self:SetValue(y)
 end
 
 function PANEL:Update()
 	local percent = self:GetValue()/self:GetMaxValue()
-	
+
 	self.barw = self:GetWide()
 	self.barh = math.Clamp(self:GetMaxValue()/self:GetViewHeight(), 8, self:GetTall())
-	
+
 	local y_room = self:GetTall()-self.barh
-	
+
 	self.barx = (self:GetWide()-self.barw)/2
 	self.bary = y_room*percent
 end
 
 function PANEL:OnMousePressed()
 	local x, y = self:CursorPos()
-	
+
 	self.mouse_down = true
-	
+
 	if x > self.barx and y > self.bary and x < self.barx+self.barw and y < self.bary+self.barh then
 		self.drag_offset = y-self.bary
 	end
 end
 function PANEL:Think()
 	local x, y = self:CursorPos()
-	
+
 	self.mouse_down = self.mouse_down and input.IsMouseDown(MOUSE_LEFT)
-	
+
 	if not self.mouse_down then return end
-	
+
 	if self.drag_offset then
 		self:SetBarY(y-self.drag_offset)
 	else
@@ -614,19 +614,19 @@ AccessorFunc(PANEL, "custom_name", "CustomName")
 function PANEL:Init()
 	self:SetPort("27015")
 	self:SetPassword("")
-	
+
 	local pnl_remove = vgui.Create("nice_button", self)
 	self.pnl_remove = pnl_remove
 	pnl_remove:Dock(RIGHT)
 	pnl_remove:SetMaterial(mat_icon_remove)
 	hook_event(self, "Remove", "DoClick")
-	
+
 	local pnl_edit = vgui.Create("nice_button", self)
 	self.pnl_edit = pnl_edit
 	pnl_edit:Dock(RIGHT)
 	pnl_edit:SetMaterial(mat_icon_edit)
 	hook_event(self, "Edit", "DoClick")
-	
+
 	local pnl_connect = vgui.Create("nice_button", self)
 	self.pnl_connect = pnl_connect
 	pnl_connect:Dock(RIGHT)
@@ -674,32 +674,32 @@ end
 local nextupdate = 0
 function PANEL:GetInfo()
 	if self.name then return end
-	
+
 	if CurTime() < nextupdate then return end
 	nextupdate = CurTime()+0.2
-	
+
 	self.name = self.custom_name or tostring(self.ip)
 	self.name_adjusted = nil
 	self.alive = true
 	self.players = -1
 	self.players_max = -1
-	
+
 	local url = Format("http://www.gametracker.com/server_info/%s:%s", self.ip, self.port)
 	http.Fetch(url, function(body, length, headers, code)
-			
+
 			if not IsValid(self) then return end
-			
+
 			local name = body:match(match_name)
 			local status = body:match(match_status)
 			local players, players_max = body:match(match_players)
-			
+
 			if name then
 				self.name = self.custom_name or parse_html_text(name)
 				self.name_adjusted = nil
 				self.alive = status == "Alive"
 				self.players = tonumber(players or "") or -1
 				self.players_max = tonumber(players_max or "") or -1
-				
+
 				if self.alive then
 					self.pnl_connect:SetColor(Color(255, 255, 255, 255))
 				else
@@ -708,9 +708,9 @@ function PANEL:GetInfo()
 			end
 		end,
 		function(error)
-			
+
 		end)
-	
+
 	serverlist.PlayerList(Format("%s:%s", self.ip, self.port), function(tbl)
 		if tbl and self.players == -1 then
 			self.players = table.Count(tbl)
@@ -720,7 +720,7 @@ end
 
 function PANEL:FitText(str, width)
 	local tw, th = surface.GetTextSize(str)
-	
+
 	if tw > width then
 		while tw > width and #str > 0 do
 			str = str:sub(1, #str-1)
@@ -733,36 +733,36 @@ function PANEL:FitText(str, width)
 end
 
 function PANEL:Paint(w, h)
-	
+
 	surface.SetFont("quickconnect_font")
-	
+
 	if not self.name then
 		local tw, th = surface.GetTextSize(tostring(self.ip)..":"..tostring(self.port))
 		surface.SetTextPos(4, h/2-th/2)
 		surface.SetTextColor(255, 255, 255, 180)
 		surface.DrawText(tostring(self.ip))
 	else
-		
+
 		if not self.name_adjusted then
 			self.name_adjusted = self:FitText(self.name, self:GetWide()*0.75-16)
 		end
-		
+
 		local text = self.name_adjusted
 		local tw, th = surface.GetTextSize(text)
 		surface.SetTextPos(4, h/2-th/2)
 		surface.SetTextColor(255, 255, 255, 180)
 		surface.DrawText(text)
-		
+
 		text = tostring(self.players >= 0 and self.players or "?")
 		local tw, th = surface.GetTextSize(text)
 		surface.SetTextPos(self:GetWide()*0.75+20-tw, h/2-th/2)
 		surface.DrawText(text)
-		
+
 		text = " / "
 		local tw, th = surface.GetTextSize(text)
 		surface.SetTextPos(self:GetWide()*0.75+20, h/2-th/2)
 		surface.DrawText(text)
-		
+
 		text = tostring(self.players_max >= 0 and self.players_max or "?")
 		surface.SetTextPos(self:GetWide()*0.75+20+tw, h/2-th/2)
 		surface.DrawText(text)
@@ -776,45 +776,45 @@ vgui.Register("server_line", PANEL)
 local PANEL = {}
 
 function PANEL:Init()
-	
+
 	self:DockPadding(8, 8, 8, 8)
-	
+
 	local pnl_right = vgui.Create("Panel", self)
 	pnl_right:Dock(RIGHT)
 	pnl_right:SetWide(16)
-	
+
 	local pnl_add = vgui.Create("nice_button", pnl_right)
 	self.pnl_add = pnl_add
 	pnl_add:SetTall(16)
 	pnl_add:Dock(BOTTOM)
 	pnl_add:SetMaterial(mat_icon_add)
 	hook_event(self, "Add", "DoClick")
-	
+
 	local pnl_refresh = vgui.Create("nice_button", pnl_right)
 	self.pnl_refresh = pnl_refresh
 	pnl_refresh:SetTall(16)
 	pnl_refresh:Dock(BOTTOM)
 	pnl_refresh:SetMaterial(mat_icon_refresh)
 	hook_event(self, "Refresh", "DoClick")
-	
+
 	local pnl_hide = vgui.Create("nice_button", pnl_right)
 	self.pnl_hide = pnl_hide
 	pnl_hide:SetTall(16)
 	pnl_hide:Dock(TOP)
 	pnl_hide:SetMaterial(mat_icon_minus)
 	hook_event(self, "Hide", "DoClick")
-	
+
 	local pnl_bar = vgui.Create("scrollbar", pnl_right)
 	self.pnl_bar = pnl_bar
 	pnl_bar:Dock(FILL)
 	hook_event(self, "Bar", "OnChange")
 	hook_event(self, "Bar", "GetValue")
 	hook_event(self, "Bar", "GetMaxValue")
-	
+
 	local pnl_list = vgui.Create("panel_list", self)
 	self.pnl_list = pnl_list
 	pnl_list:Dock(FILL)
-	
+
 	self:Rebuild()
 end
 
@@ -858,16 +858,16 @@ function PANEL:PerformLayout()
 end
 
 function PANEL:Paint(w, h)
-	
+
 	local desired = 100
-	
+
 	if self.mouse_inside then
 		desired = 255
 	end
-	
+
 	self.alpha = math.Approach(self.alpha or desired, desired, FrameTime()*1200)
 	self:SetAlpha(self.alpha)
-	
+
 	draw.RoundedBox(8, 0, 0, w, h, Color(0, 0, 0, 210))
 end
 
@@ -875,10 +875,10 @@ local nextupdate = 0
 function PANEL:Think()
 	local x, y = self:CursorPos()
 	self.mouse_inside = x > 0 and y > 0 and x < self:GetWide() and y < self:GetTall()
-	
+
 	if CurTime() < nextupdate then return end
 	nextupdate = CurTime()+0.2
-	
+
 	for _,pnl in pairs(self.pnl_list:GetItems()) do
 		pnl:GetInfo()
 	end
@@ -893,15 +893,19 @@ timer.Simple(1, function()
 	pnl:SetSize(600, 200)
 	pnl:AlignBottom(50)
 	pnl:AlignRight(50)
-	
+
 	pnl:MakePopup()
 	pnl:MoveToFront()
-	
+
 	pnl_quickconnect = pnl
 end)
 
 concommand.Add("menu_quickconnect", function()
-	pnl_quickconnect:SetVisible(true)
+	if pnl_quickconnect:IsVisible() then
+		pnl_quickconnect:SetVisible(false)
+	else
+		pnl_quickconnect:SetVisible(true)
+	end
 end)
 
 concommand.Add("openserverbrowser", function()
